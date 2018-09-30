@@ -13,7 +13,7 @@ after_success:
   - docker build -t gustavolee/multi-server ./server
   - docker build -t gustavolee/multi-worker ./worker
   # Login to the Docker CLI
-  - echo s/([^a-zA-Z0-9])/\\$DOCKER_PASSWORD/g | docker login -u "$DOCKER_ID" --password-stdin
+  - echo "${$DOCKER_PASSWORD//\\/\\\\}" | docker login -u "$DOCKER_ID" --password-stdin
   # Take those images and push to Docker Hub
   - docker push gustavolee/multi-client
   - docker push gustavolee/multi-nginx
