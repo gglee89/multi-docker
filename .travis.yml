@@ -1,0 +1,21 @@
+sudo: required
+services: -docker
+
+before_install:
+  - docker build -t gustavolee/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run gustavolee/react-test npm test -- --coverage
+
+after_success:
+  - docker build -t gustavolee/multi-client ./client
+  - docker build -t gustavolee/multi-nginx ./nginx
+  - docker build -t gustavolee/multi-server ./server
+  - docker build -t gustavolee/multi-worker ./worker
+  # Login to the Docker CLI
+  - echo s/([^a-zA-Z0-9])/\\$DOCKER_PASSWORD/g | docker login -u "$DOCKER_ID" --password-stdin
+  # Take those images and push to Docker Hub
+  - docker push gustavolee/multi-client
+  - docker push gustavolee/multi-nginx
+  - docker push gustavolee/multi-server
+  - docker push gustavolee/multi-worker
