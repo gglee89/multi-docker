@@ -19,3 +19,16 @@ after_success:
   - docker push gustavolee/multi-nginx
   - docker push gustavolee/multi-server
   - docker push gustavolee/multi-worker
+
+deploy:
+  provider: elasticbeanstalk
+  region: ap-northeast-2
+  app: multi-docker
+  env: multi-docker-env
+  bucket_name: elasticbeanstalk-ap-northeast-2-291539272605
+  bucket_path: docker-multi
+  on:
+    branch: master
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key:
+    secure: $AWS_SECRET_KEY
