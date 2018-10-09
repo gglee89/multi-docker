@@ -4,19 +4,19 @@ jobs:
     - image: .circleci:node:8.10
   steps:
     - checkout
-    - run
+    - run:
       name: Setup Env
       command: |
         echo 'export TAG=0.1.${CIRCLE_BUILD_NUM}' >> $BASH_ENV
-    - run
+    - run:
       name: Setup Tests
       command: |
         docker build -t gustavolee/react-test -f ./client/Dockerfile.dev ./client
-    - run
+    - run:
       name: Run Tests
       command: |
         docker run gustavolee/react-test npm test -- --coverage
-    - run
+    - run:
       name: After Success
       command: |
         docker build -t gustavolee/multi-client ./client
@@ -28,7 +28,7 @@ jobs:
         docker push gustavolee/multi-nginx
         docker push gustavolee/multi-worker
         docker push gustavolee/multi-server
-    - run
+    - run:
       name: Deploy App to Digital Ocean
       command: |
         scp deploy_app.sh root@159.65.11.186:./
