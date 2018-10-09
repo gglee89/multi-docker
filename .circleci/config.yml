@@ -6,30 +6,30 @@ jobs:
     steps:
       - checkout
       - run:
-        name: Setup Env
-        command: |
-          echo 'export TAG=0.1.${CIRCLE_BUILD_NUM}' >> $BASH_ENV
+          name: Setup Env
+          command: |
+            echo 'export TAG=0.1.${CIRCLE_BUILD_NUM}' >> $BASH_ENV
       - run:
-        name: Setup Tests
-        command: |
-          docker build -t gustavolee/react-test -f ./client/Dockerfile.dev ./client
+          name: Setup Tests
+          command: |
+            docker build -t gustavolee/react-test -f ./client/Dockerfile.dev ./client
       - run:
-        name: Run Tests
-        command: |
-          docker run gustavolee/react-test npm test -- --coverage
+          name: Run Tests
+          command: |
+            docker run gustavolee/react-test npm test -- --coverage
       - run:
-        name: After Success
-        command: |
-          docker build -t gustavolee/multi-client ./client
-          docker build -t gustavolee/multi-nginx ./nginx
-          docker build -t gustavolee/multi-worker ./worker
-          docker build -t gustavolee/multi-server ./server
-          echo $DOCKER_PASSWORD | docker login -u $DOCKER_LOGIN --password-stdin
-          docker push gustavolee/multi-client
-          docker push gustavolee/multi-nginx
-          docker push gustavolee/multi-worker
-          docker push gustavolee/multi-server
+          name: After Success
+          command: |
+            docker build -t gustavolee/multi-client ./client
+            docker build -t gustavolee/multi-nginx ./nginx
+            docker build -t gustavolee/multi-worker ./worker
+            docker build -t gustavolee/multi-server ./server
+            echo $DOCKER_PASSWORD | docker login -u $DOCKER_LOGIN --password-stdin
+            docker push gustavolee/multi-client
+            docker push gustavolee/multi-nginx
+            docker push gustavolee/multi-worker
+            docker push gustavolee/multi-server
       - run:
-        name: Deploy App to Digital Ocean
-        command: |
-          scp deploy_app.sh root@159.65.11.186:./
+          name: Deploy App to Digital Ocean
+          command: |
+            scp deploy_app.sh root@159.65.11.186:./
