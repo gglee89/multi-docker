@@ -26,7 +26,7 @@ jobs:
             docker build -t gustavolee/multi-nginx ./nginx
             docker build -t gustavolee/multi-worker ./worker
             docker build -t gustavolee/multi-server ./server
-            echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_LOGIN" --password-stdin
+            echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
             docker push gustavolee/multi-client
             docker push gustavolee/multi-nginx
             docker push gustavolee/multi-worker
